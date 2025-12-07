@@ -456,20 +456,42 @@ function colocarPieza(posicion) {
     alert("Esta casilla ya está ocupada");
     return;
   }
+  // Colocar temporalmente la pieza en la casilla
+  const piezaIndex = piezaSeleccionada;
+  const cell = document.getElementById("puzzle-" + posicion);
+  datos.puzzle.posiciones[posicion] = piezaIndex;
+  cell.innerHTML =
+    '<img src="' + datos.puzzle.piezas[piezaIndex] + '" alt="pieza" />';
 
-  datos.puzzle.posiciones[posicion] = piezaSeleccionada;
-  document.getElementById("puzzle-" + posicion).innerHTML =
-    '<img src="' + datos.puzzle.piezas[piezaSeleccionada] + '" alt="pieza" />';
-  document.getElementById("puzzle-" + posicion).classList.add("colocada");
-  document.getElementById("pieza-" + piezaSeleccionada).style.display = "none";
+  // Comprobar si la pieza es la correcta para esta posición
+  // (las piezas fueron generadas como pieza0 -> posición 0, pieza1 -> pos1, ...)
+  if (piezaIndex === posicion) {
+    // correcta
+    cell.classList.add("colocada");
+    const piezaElem = document.getElementById("pieza-" + piezaIndex);
+    if (piezaElem) piezaElem.style.display = "none";
+  } else {
+    // incorrecta: marcar visualmente y revertir
+    cell.classList.add("incorrecta");
+    setTimeout(() => {
+      cell.classList.remove("incorrecta");
+      cell.innerHTML = "?";
+      datos.puzzle.posiciones[posicion] = undefined;
+      // mostrar de nuevo la pieza en el panel de piezas
+      const piezaElem = document.getElementById("pieza-" + piezaIndex);
+      if (piezaElem) piezaElem.style.display = "inline-block";
+    }, 900);
+  }
 
+  // limpiar selección y restablecer opacidad
   piezaSeleccionada = null;
   document
     .querySelectorAll('[id^="pieza-"]')
     .forEach((p) => (p.style.opacity = "1"));
 
-  // Verificar si se completó
-  if (datos.puzzle.posiciones.every((p) => p !== undefined)) {
+  // Verificar si todas las piezas están correctamente colocadas
+  const completadoCorrecto = datos.puzzle.posiciones.every((p, idx) => p === idx);
+  if (completadoCorrecto) {
     setTimeout(() => {
       document.getElementById("contenido-juego").innerHTML +=
         '<div class="mensaje-exito">🎉 ¡Puzzle completado!</div>';

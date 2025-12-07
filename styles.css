@@ -257,6 +257,12 @@ header p {
   object-fit: cover;
 }
 
+/* Indicar colocación incorrecta temporalmente */
+.pieza-puzzle.incorrecta {
+  box-shadow: 0 0 0 4px rgba(244, 67, 54, 0.25) inset;
+  animation: shake 0.35s ease;
+}
+
 /* BOTÓN VOLVER */
 .btn-volver {
   display: block;
