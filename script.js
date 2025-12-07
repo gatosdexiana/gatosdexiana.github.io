@@ -130,28 +130,25 @@ function cargarJuego(tipo) {
 
 // JUEGO DE MEMORIA
 function inicializarMemoria() {
+  // Construir 6 pares de imágenes desde la carpeta `gatosConPelo` (12 cartas)
+  const pares = 6;
+  const disponibles = gatosConPelo.slice();
+  // mezclar disponibles
+  disponibles.sort(() => Math.random() - 0.5);
+  const seleccion = disponibles.slice(0, pares);
+
+  const cartas = [];
+  seleccion.forEach((img) => {
+    cartas.push(img);
+    cartas.push(img);
+  });
+
   datos.memoria = {
-    cartas: [
-      "🐱",
-      "😺",
-      "😸",
-      "😹",
-      "😻",
-      "😼",
-      "🐱",
-      "😺",
-      "😸",
-      "😹",
-      "😻",
-      "😼",
-    ],
+    cartas: cartas.sort(() => Math.random() - 0.5),
     volteadas: [],
     acertadas: [],
     intentos: 0,
   };
-
-  // Mezclar cartas
-  datos.memoria.cartas = datos.memoria.cartas.sort(() => Math.random() - 0.5);
 
   const contenido = document.getElementById("contenido-juego");
   let html =
@@ -180,9 +177,11 @@ function volteaCarta(index) {
   }
 
   datos.memoria.volteadas.push(index);
-  document.getElementById("carta-" + index).classList.add("volteada");
-  document.getElementById("carta-" + index).textContent =
-    datos.memoria.cartas[index];
+  const elemento = document.getElementById("carta-" + index);
+  elemento.classList.add("volteada");
+  // Mostrar la imagen dentro de la carta usando un <img>
+  elemento.innerHTML =
+    '<img src="' + datos.memoria.cartas[index] + '" alt="gato" />';
 
   if (datos.memoria.volteadas.length === 2) {
     datos.memoria.intentos++;
@@ -208,10 +207,16 @@ function volteaCarta(index) {
     } else {
       // No es un acierto, voltear de vuelta
       setTimeout(() => {
-        document.getElementById("carta-" + index1).classList.remove("volteada");
-        document.getElementById("carta-" + index1).textContent = "?";
-        document.getElementById("carta-" + index2).classList.remove("volteada");
-        document.getElementById("carta-" + index2).textContent = "?";
+        const c1 = document.getElementById("carta-" + index1);
+        const c2 = document.getElementById("carta-" + index2);
+        if (c1) {
+          c1.classList.remove("volteada");
+          c1.innerHTML = "?";
+        }
+        if (c2) {
+          c2.classList.remove("volteada");
+          c2.innerHTML = "?";
+        }
         datos.memoria.volteadas = [];
       }, 1000);
     }

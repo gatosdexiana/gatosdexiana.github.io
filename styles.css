@@ -105,6 +105,14 @@ header p {
   color: #333;
 }
 
+/* Ajustes para la imagen dentro de la carta */
+.carta img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 6px;
+  display: block;
+}
+
 .carta.acertada {
   background: #4caf50;
   cursor: default;
