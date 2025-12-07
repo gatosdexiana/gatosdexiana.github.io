@@ -421,8 +421,8 @@ function inicializarPuzzle() {
     html +=
       '<span style="margin: 0 10px; display: inline-block; width:48px; height:48px;" id="pieza-' +
       index +
-      '">'
-      + '<img draggable="true" ondragstart="dragStartPiece(event, ' +
+      '">' +
+      '<img draggable="true" ondragstart="dragStartPiece(event, ' +
       index +
       ')" src="' +
       pieza +
@@ -470,7 +470,10 @@ function dropOnCell(event, posicion) {
   const piezaIndex = parseInt(data, 10);
 
   // if the cell already has a correct piece, ignore
-  if (datos.puzzle.posiciones[posicion] !== undefined && datos.puzzle.posiciones[posicion] === posicion) {
+  if (
+    datos.puzzle.posiciones[posicion] !== undefined &&
+    datos.puzzle.posiciones[posicion] === posicion
+  ) {
     return;
   }
 
@@ -479,7 +482,8 @@ function dropOnCell(event, posicion) {
 
   // Place temporarily and validate
   datos.puzzle.posiciones[posicion] = piezaIndex;
-  cell.innerHTML = '<img src="' + datos.puzzle.piezas[piezaIndex] + '" alt="pieza" />';
+  cell.innerHTML =
+    '<img src="' + datos.puzzle.piezas[piezaIndex] + '" alt="pieza" />';
 
   if (piezaIndex === posicion) {
     // correct
@@ -496,7 +500,9 @@ function dropOnCell(event, posicion) {
   }
 
   // After drop, check completion
-  const completadoCorrecto = datos.puzzle.posiciones.every((p, idx) => p === idx);
+  const completadoCorrecto = datos.puzzle.posiciones.every(
+    (p, idx) => p === idx
+  );
   if (completadoCorrecto) {
     setTimeout(() => {
       document.getElementById("contenido-juego").innerHTML +=
@@ -549,7 +555,9 @@ function colocarPieza(posicion) {
     .forEach((p) => (p.style.opacity = "1"));
 
   // Verificar si todas las piezas están correctamente colocadas
-  const completadoCorrecto = datos.puzzle.posiciones.every((p, idx) => p === idx);
+  const completadoCorrecto = datos.puzzle.posiciones.every(
+    (p, idx) => p === idx
+  );
   if (completadoCorrecto) {
     setTimeout(() => {
       document.getElementById("contenido-juego").innerHTML +=
@@ -591,9 +599,9 @@ function inicializarReflejos() {
 
   html += '<div class="modos-dificultad">';
   html +=
-    '<button class="btn-modo facil" onclick="seleccionarModo(\'facil\')">😊 FÁCIL<br><small>3 segundos</small></button>';
+    '<button class="btn-modo facil" onclick="seleccionarModo(\'facil\')">😊 FÁCIL<br><small>5 segundos</small></button>';
   html +=
-    '<button class="btn-modo normal" onclick="seleccionarModo(\'normal\')">😎 NORMAL<br><small>2 segundos</small></button>';
+    '<button class="btn-modo normal" onclick="seleccionarModo(\'normal\')">😎 NORMAL<br><small>3 segundos</small></button>';
   html +=
     '<button class="btn-modo dificil" onclick="seleccionarModo(\'dificil\')">🔥 DIFÍCIL<br><small>1.5 segundos</small></button>';
   html += "</div>";
@@ -646,14 +654,14 @@ function seleccionarModo(modo) {
   // Configurar tiempo de desaparición según el modo
   switch (modo) {
     case "facil":
-      window.datosReflejos.tiempoDesaparicion = 3000;
+      window.datosReflejos.tiempoDesaparicion = 5000;
       document.getElementById("modo-actual").textContent =
-        "😊 Modo: FÁCIL (3 seg)";
+        "😊 Modo: FÁCIL (5 seg)";
       break;
     case "normal":
-      window.datosReflejos.tiempoDesaparicion = 2000;
+      window.datosReflejos.tiempoDesaparicion = 3000;
       document.getElementById("modo-actual").textContent =
-        "😎 Modo: NORMAL (2 seg)";
+        "😎 Modo: NORMAL (3 seg)";
       break;
     case "dificil":
       window.datosReflejos.tiempoDesaparicion = 1500;
