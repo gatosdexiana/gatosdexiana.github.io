@@ -407,7 +407,7 @@ function inicializarPuzzle() {
     html +=
       '<button class="pieza-puzzle" id="puzzle-' +
       i +
-      '" onclick="colocarPieza(' +
+      '" ondragover="allowDrop(event)" ondrop="dropOnCell(event, ' +
       i +
       ')">?</button>';
   }
@@ -419,14 +419,14 @@ function inicializarPuzzle() {
 
   datos.puzzle.piezas.forEach((pieza, index) => {
     html +=
-      '<span style="margin: 0 10px; cursor: pointer; display: inline-block; width:48px; height:48px;" id="pieza-' +
+      '<span style="margin: 0 10px; display: inline-block; width:48px; height:48px;" id="pieza-' +
       index +
-      '" onclick="seleccionarPieza(' +
+      '">'
+      + '<img draggable="true" ondragstart="dragStartPiece(event, ' +
       index +
-      ')">' +
-      '<img src="' +
+      ')" src="' +
       pieza +
-      '" alt="pieza" style="width:100%; height:100%; object-fit:cover; border-radius:6px;" />' +
+      '" alt="pieza" style="width:100%; height:100%; object-fit:cover; border-radius:6px; cursor:grab;" />' +
       "</span>";
   });
 
@@ -444,6 +444,65 @@ function seleccionarPieza(index) {
     .querySelectorAll('[id^="pieza-"]')
     .forEach((p) => (p.style.opacity = "0.5"));
   document.getElementById("pieza-" + index).style.opacity = "1";
+}
+
+// --- Drag & Drop handlers for puzzle pieces ---
+function dragStartPiece(event, index) {
+  // Transfer the piece index as payload
+  event.dataTransfer.setData("text/plain", String(index));
+  // set effect
+  event.dataTransfer.effectAllowed = "move";
+}
+
+function allowDrop(event) {
+  event.preventDefault();
+  // visual feedback
+  const cell = event.currentTarget;
+  if (cell) cell.classList.add("drag-over");
+}
+
+function dropOnCell(event, posicion) {
+  event.preventDefault();
+  const cell = document.getElementById("puzzle-" + posicion);
+  if (cell) cell.classList.remove("drag-over");
+  const data = event.dataTransfer.getData("text/plain");
+  if (!data) return;
+  const piezaIndex = parseInt(data, 10);
+
+  // if the cell already has a correct piece, ignore
+  if (datos.puzzle.posiciones[posicion] !== undefined && datos.puzzle.posiciones[posicion] === posicion) {
+    return;
+  }
+
+  // if piece already used in another correct spot, hide it
+  const piezaElem = document.getElementById("pieza-" + piezaIndex);
+
+  // Place temporarily and validate
+  datos.puzzle.posiciones[posicion] = piezaIndex;
+  cell.innerHTML = '<img src="' + datos.puzzle.piezas[piezaIndex] + '" alt="pieza" />';
+
+  if (piezaIndex === posicion) {
+    // correct
+    cell.classList.add("colocada");
+    if (piezaElem) piezaElem.style.display = "none";
+  } else {
+    // incorrect: show feedback and revert
+    cell.classList.add("incorrecta");
+    setTimeout(() => {
+      cell.classList.remove("incorrecta");
+      cell.innerHTML = "?";
+      datos.puzzle.posiciones[posicion] = undefined;
+    }, 900);
+  }
+
+  // After drop, check completion
+  const completadoCorrecto = datos.puzzle.posiciones.every((p, idx) => p === idx);
+  if (completadoCorrecto) {
+    setTimeout(() => {
+      document.getElementById("contenido-juego").innerHTML +=
+        '<div class="mensaje-exito">🎉 ¡Puzzle completado!</div>';
+    }, 300);
+  }
 }
 
 function colocarPieza(posicion) {
