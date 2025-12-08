@@ -192,6 +192,11 @@ function volteaCarta(index) {
     return;
   }
 
+  // Bloquear si ya hay 2 cartas volteadas (evitar clicks múltiples rápidos)
+  if (datos.memoria.volteadas.length >= 2) {
+    return;
+  }
+
   datos.memoria.volteadas.push(index);
   const elemento = document.getElementById("carta-" + index);
   elemento.classList.add("volteada");
