@@ -561,6 +561,13 @@ function dropOnCell(event, posicion) {
       (element) => element !== null && element !== undefined
     ).length === 9 && datos.puzzle.posiciones.every((p, idx) => p === idx);
   if (completadoCorrecto) {
+    // Animar desaparición de bordes
+    const piezas = document.querySelectorAll(".pieza-puzzle");
+    piezas.forEach((pieza) => {
+      pieza.style.transition = "all 0.5s ease";
+      pieza.style.border = "none";
+    });
+
     setTimeout(() => {
       document.getElementById("contenido-juego").innerHTML +=
         '<div class="mensaje-exito">🎉 ¡Puzzle completado!</div>';
@@ -603,6 +610,13 @@ function placePiece(piezaIndex, posicion) {
     (p, idx) => p === idx
   );
   if (completadoCorrecto) {
+    // Animar desaparición de bordes
+    const piezas = document.querySelectorAll(".pieza-puzzle");
+    piezas.forEach((pieza) => {
+      pieza.style.transition = "all 0.5s ease";
+      pieza.style.border = "none";
+    });
+
     setTimeout(() => {
       document.getElementById("contenido-juego").innerHTML +=
         '<div class="mensaje-exito">🎉 ¡Puzzle completado!</div>';
@@ -695,6 +709,13 @@ function colocarPieza(posicion) {
     (p, idx) => p === idx
   );
   if (completadoCorrecto) {
+    // Animar desaparición de bordes
+    const piezas = document.querySelectorAll(".pieza-puzzle");
+    piezas.forEach((pieza) => {
+      pieza.style.transition = "all 0.5s ease";
+      pieza.style.border = "none";
+    });
+
     setTimeout(() => {
       document.getElementById("contenido-juego").innerHTML +=
         '<div class="mensaje-exito">🎉 ¡Puzzle completado!</div>';
