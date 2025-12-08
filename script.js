@@ -759,6 +759,7 @@ function inicializarReflejos() {
   html +=
     '<div id="modo-actual" style="text-align: center; font-size: 1.1em; margin-bottom: 15px; font-weight: bold;"></div>';
   html += '<div class="gatos-grid-reflejos" id="gatos-grid"></div>';
+  html += '<div id="resultado-reflejos" style="margin-top: 20px;"></div>';
   html +=
     '<button class="boton-iniciar-reflejos" id="btn-iniciar-reflejos" onclick="iniciarJuegoReflejos()">Comenzar Juego</button>';
   html += "</div>";
@@ -815,6 +816,9 @@ function iniciarJuegoReflejos() {
   window.datosReflejos.tiempo = 60;
   window.datosReflejos.gatosPresentados = 0;
   window.datosReflejos.juegoTerminado = false;
+
+  // Limpiar resultado anterior
+  document.getElementById("resultado-reflejos").innerHTML = "";
 
   document.getElementById("btn-iniciar-reflejos").disabled = true;
   document.getElementById("aciertos-reflejos").textContent = "0";
@@ -958,22 +962,22 @@ function terminarJuegoReflejos(razon = "tiempo") {
   const grid = document.getElementById("gatos-grid");
   grid.innerHTML = "";
 
-  const contenido = document.getElementById("contenido-juego");
+  const resultadoDiv = document.getElementById("resultado-reflejos");
   const puntuacionFinal =
     window.datosReflejos.aciertos - window.datosReflejos.errores * 2;
 
   let mensajeFinal = "";
   if (razon === "gato_calvo") {
     mensajeFinal =
-      '<div class="mensaje-exito" style="font-size: 1.2em; margin-top: 20px; color: #f44336;">' +
+      '<div class="mensaje-exito" style="font-size: 1.2em; color: #f44336; text-align: center;">' +
       "<p>😱 ¡GAME OVER! ¡Tocaste el gato calvo!</p>";
   } else if (razon === "no_toque") {
     mensajeFinal =
-      '<div class="mensaje-exito" style="font-size: 1.2em; margin-top: 20px; color: #f44336;">' +
+      '<div class="mensaje-exito" style="font-size: 1.2em; color: #f44336; text-align: center;">' +
       "<p>😱 ¡GAME OVER! ¡No tocaste el gato a tiempo!</p>";
   } else {
     mensajeFinal =
-      '<div class="mensaje-exito" style="font-size: 1.2em; margin-top: 20px;">' +
+      '<div class="mensaje-exito" style="font-size: 1.2em; text-align: center;">' +
       "<p>🎉 ¡Se acabó el tiempo!</p>";
   }
 
@@ -989,7 +993,7 @@ function terminarJuegoReflejos(razon = "tiempo") {
     "</p>" +
     "</div>";
 
-  contenido.innerHTML += mensajeFinal;
+  resultadoDiv.innerHTML = mensajeFinal;
 
   const btn = document.getElementById("btn-iniciar-reflejos");
   if (btn) {
