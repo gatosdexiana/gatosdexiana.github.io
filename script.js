@@ -423,7 +423,15 @@ function inicializarPuzzle() {
     '<div style="text-align: center; margin-top: 30px; font-size: 1.2em;">Piezas disponibles:</div>';
   html += '<div style="text-align: center; font-size: 2em; margin-top: 15px;">';
 
-  datos.puzzle.piezas.forEach((pieza, index) => {
+  // Crear array de índices y desordenarlos
+  const indicesPiezas = Array.from(
+    { length: datos.puzzle.piezas.length },
+    (_, i) => i
+  );
+  indicesPiezas.sort(() => Math.random() - 0.5);
+
+  indicesPiezas.forEach((index) => {
+    const pieza = datos.puzzle.piezas[index];
     html +=
       '<span style="margin: 0 10px; display: inline-block; width:48px; height:48px;" id="pieza-' +
       index +
