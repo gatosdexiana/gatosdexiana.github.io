@@ -860,6 +860,20 @@ function generarGatoAleatorio() {
     return;
 
   const grid = document.getElementById("gatos-grid");
+
+  // Contar solo elementos visibles (con opacity !== "0")
+  let elementosVisibles = 0;
+  for (let i = 0; i < grid.children.length; i++) {
+    if (grid.children[i].style.opacity !== "0") {
+      elementosVisibles++;
+    }
+  }
+
+  // No añadir más tarjetas si ya hay 9 visibles
+  if (elementosVisibles >= 9) {
+    return;
+  }
+
   const aleatorio = Math.random();
   const tienePelo = aleatorio > 0.2; // 80% con pelo, 20% gato calvo
   const esCalvo = !tienePelo;
