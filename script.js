@@ -413,7 +413,7 @@ function inicializarPuzzle() {
     html +=
       '<button class="pieza-puzzle" id="puzzle-' +
       i +
-      '" ondragover="allowDrop(event)" ondrop="dropOnCell(event, ' +
+      '" ondragover="allowDrop(event)" ondragleave="leaveDrop(event)" ondrop="dropOnCell(event, ' +
       i +
       ')">?</button>';
   }
@@ -475,6 +475,12 @@ function allowDrop(event) {
   // visual feedback
   const cell = event.currentTarget;
   if (cell) cell.classList.add("drag-over");
+}
+
+function leaveDrop(event) {
+  // Remove visual feedback when dragging leaves the cell
+  const cell = event.currentTarget;
+  if (cell) cell.classList.remove("drag-over");
 }
 
 function dropOnCell(event, posicion) {
