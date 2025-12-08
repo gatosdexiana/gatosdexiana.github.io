@@ -399,6 +399,34 @@ function verificarSonidos(respuesta, index) {
 
 // JUEGO DE PUZZLE
 function inicializarPuzzle() {
+  // Mostrar selector de gatos para elegir qué puzzle jugar
+  const contenido = document.getElementById("contenido-juego");
+  let html = '<div class="puzzle-container">';
+  html += '<div class="pregunta">Elige un gato para hacer su puzzle:</div>';
+  html +=
+    '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 15px; margin: 30px 0; padding: 0 20px;">';
+
+  for (let i = 1; i <= 17; i++) {
+    html +=
+      '<button class="btn-selector-gato" onclick="cargarPuzzleSeleccionado(' +
+      i +
+      ')" style="padding:0; border:none; background:none; cursor:pointer; border-radius:10px; overflow:hidden; border:3px solid #ddd; transition:all 0.3s;"><img src="images/gatos-con-pelo/gato' +
+      i +
+      '.jpg" alt="Gato ' +
+      i +
+      '" style="width:100%; height:100px; object-fit:cover; display:block;"></button>';
+  }
+
+  html += "</div></div>";
+  contenido.innerHTML = html;
+}
+
+function cargarPuzzleSeleccionado(gatoNum) {
+  // Cargar las piezas del gato seleccionado
+  datos.puzzle.piezas = [];
+  for (let i = 0; i < 9; i++) {
+    datos.puzzle.piezas.push(`images/puzzle/gato${gatoNum}/pieza${i}.jpg`);
+  }
   datos.puzzle.posiciones = new Array(9);
   datos.puzzle.completado = false;
 
@@ -406,7 +434,9 @@ function inicializarPuzzle() {
 
   let html = '<div class="puzzle-container">';
   html +=
-    '<div class="pregunta">Completa el puzzle colocando todos los emojis en las casillas</div>';
+    '<div class="pregunta">Puzzle del Gato ' +
+    gatoNum +
+    " - Completa el puzzle colocando todas las piezas en las casillas</div>";
   html += '<div class="puzzle-grid">';
 
   for (let i = 0; i < 9; i++) {
@@ -448,7 +478,6 @@ function inicializarPuzzle() {
 
   html += "</div>";
   html += "</div>";
-
   contenido.innerHTML = html;
 }
 
