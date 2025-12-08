@@ -508,13 +508,14 @@ function dropOnCell(event, posicion) {
   }
 
   // After drop, check completion
-  const completadoCorrecto = datos.puzzle.posiciones.every(
-    (p, idx) => p === idx
-  );
+  const completadoCorrecto =
+    datos.puzzle.posiciones.filter(
+      (element) => element !== null && element !== undefined
+    ).length === 9 && datos.puzzle.posiciones.every((p, idx) => p === idx);
   if (completadoCorrecto) {
     setTimeout(() => {
       document.getElementById("contenido-juego").innerHTML +=
-        '<div class="mensaje-exito">🎉 ¡Correcto!</div>';
+        '<div class="mensaje-exito">🎉 ¡Puzzle completado!</div>';
     }, 300);
   }
 }
