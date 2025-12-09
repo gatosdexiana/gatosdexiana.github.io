@@ -120,6 +120,11 @@ let datos = {
     posiciones: new Array(9),
     completado: false,
   },
+  reflejos: {
+    puntuacionMaximaJuegoReflejos: localStorage.getItem(
+      "puntuacionMaximaJuegoReflejos"
+    ),
+  },
 };
 
 // Función para ir al menú desde la portada
@@ -772,7 +777,13 @@ function inicializarReflejos() {
   let html = '<div class="reflejos-container">';
   html += '<div class="instrucciones-reflejos">';
   html += "<strong>🎮 Elige tu nivel de dificultad:</strong><br>";
-  html += "⏱️ Las tarjetas desaparecen en diferente tiempo según la dificultad";
+  html +=
+    "⏱️ Las tarjetas desaparecen en diferente tiempo según la dificultad<br>";
+  if (datos.reflejos.puntuacionMaximaJuegoReflejos) {
+    html +=
+      "🥇 Puntuación máxima actual: " +
+      datos.reflejos.puntuacionMaximaJuegoReflejos;
+  }
   html += "</div>";
 
   html += '<div class="modos-dificultad">';
@@ -797,21 +808,16 @@ function inicializarReflejos() {
   html +=
     '<small><b>X</b><span onclick="cerrarInstruccionesReflejos()">&nbsp;<u>Cerrar instrucciones</u></span></small>';
   html += "</div>";
-  html += '<div class="puntuacion-reflejos">';
-  html +=
-    '<div class="stat-box aciertos">✅ Aciertos: <span id="aciertos-reflejos">0</span></div>';
-  html +=
-    '<div class="stat-box errores">❌ Errores: <span id="errores-reflejos">0</span></div>';
-  html += "</div>";
   html +=
     '<div class="cronometro">⏱️ Tiempo: <span id="cronometro-valor">60</span>s</div>';
   html +=
     '<div id="modo-actual" style="text-align: center; font-size: 1.1em; margin-bottom: 15px; font-weight: bold;"></div>';
   html += '<div class="gatos-grid-reflejos" id="gatos-grid"></div>';
   html += '<div id="resultado-reflejos" style="margin-top: 20px;"></div>';
+  html += '<div class="puntuacion-reflejos">';
+  html += "</div>";
   html +=
     '<button class="boton-iniciar-reflejos" id="btn-iniciar-reflejos" onclick="iniciarJuegoReflejos()">Comenzar Juego</button>';
-  html += "</div>";
   html += "</div>";
 
   contenido.innerHTML = html;
@@ -870,8 +876,6 @@ function iniciarJuegoReflejos() {
   document.getElementById("resultado-reflejos").innerHTML = "";
 
   document.getElementById("btn-iniciar-reflejos").disabled = true;
-  document.getElementById("aciertos-reflejos").textContent = "0";
-  document.getElementById("errores-reflejos").textContent = "0";
   document.getElementById("cronometro-valor").textContent = "60";
 
   // Limpiar grid
@@ -1002,15 +1006,11 @@ function clickearGato(id, tienePelo, esCalvo) {
     // ¡Acierto!
     window.datosReflejos.aciertos++;
     elemento.classList.add("acertado");
-    document.getElementById("aciertos-reflejos").textContent =
-      window.datosReflejos.aciertos;
     elemento.style.opacity = "0";
   } else {
     // Error
     window.datosReflejos.errores++;
     elemento.classList.add("fallado");
-    document.getElementById("errores-reflejos").textContent =
-      window.datosReflejos.errores;
     elemento.style.opacity = "0";
   }
 }
@@ -1052,14 +1052,11 @@ function terminarJuegoReflejos(razon = "tiempo") {
   }
 
   mensajeFinal +=
-    '<p style="font-size: 1.3em; margin-top: 10px;">✅ Aciertos: ' +
-    window.datosReflejos.aciertos +
-    "</p>" +
-    '<p style="font-size: 1.3em; color: #f44336;">❌ Errores: ' +
-    window.datosReflejos.errores +
-    "</p>" +
     '<p style="font-size: 1.5em; margin-top: 15px; color: #667eea;">📊 Puntuación: ' +
     Math.max(0, puntuacionFinal) +
+    "</p>" +
+    '<p style="font-size: 1.5em; margin-top: 15px; color: #667eea;">🥇 Tu puntuación máxima: ' +
+    datos.reflejos.puntuacionMaximaJuegoReflejos +
     "</p>" +
     "</div>";
 
@@ -1069,6 +1066,39 @@ function terminarJuegoReflejos(razon = "tiempo") {
   if (btn) {
     btn.disabled = false;
     btn.textContent = "Jugar de Nuevo";
+  }
+
+  actualizarPuntuacionMaximaReflejos(puntuacionFinal);
+}
+
+function actualizarPuntuacionMaximaReflejos(puntuacionActual) {
+  const clave = "puntuacionMaximaJuegoReflejos";
+
+  // A. Recuperar la puntuación máxima guardada
+  // localStorage.getItem() siempre devuelve una cadena (string) o null.
+  const maximaGuardadaString = localStorage.getItem(clave);
+
+  // B. Convertir a número (o usar 0 si no hay nada guardado)
+  let maximaGuardada = 0;
+  if (maximaGuardadaString !== null) {
+    // Usamos parseInt para convertir la cadena a un número entero.
+    maximaGuardada = parseInt(maximaGuardadaString);
+  }
+
+  // C. Comparar y Actualizar
+  if (puntuacionActual > maximaGuardada) {
+    // La nueva puntuación es la máxima
+    console.log(`¡Nuevo récord! ${puntuacionActual}`);
+
+    // Guardar la nueva puntuación máxima (debe ser una cadena)
+    localStorage.setItem(clave, puntuacionActual.toString());
+    datos.reflejos.puntuacionMaximaJuegoReflejos = puntuacionActual;
+    return puntuacionActual; // Devuelve el nuevo récord
+  } else {
+    console.log(
+      `Puntuación obtenida: ${puntuacionActual}. Máxima: ${maximaGuardada}`
+    );
+    return maximaGuardada; // Devuelve el récord existente
   }
 }
 
