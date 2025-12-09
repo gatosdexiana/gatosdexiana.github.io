@@ -32,31 +32,31 @@ let datos = {
   adivinanza: {
     preguntas: [
       {
-        imagen: "🐈",
+        imagen: "images/quiz/singapura.jpg",
         pregunta: "¿Cuál es la raza más pequeña de gato?",
         opciones: ["Singapura", "Munchkin", "Devon Rex", "Korat"],
         respuesta: "Singapura",
       },
       {
-        imagen: "😸",
+        imagen: "images/quiz/abisinio.jpg",
         pregunta: "¿Qué gato es conocido por tener orejas muy grandes?",
         opciones: ["Bengalí", "Siberiano", "Abisinio", "Persa"],
         respuesta: "Abisinio",
       },
       {
-        imagen: "🐱",
+        imagen: "images/quiz/persa.jpg",
         pregunta: "¿Cuál gato tiene el pelaje más suave y largo?",
         opciones: ["Siamés", "Persa", "Maine Coon", "Esfinge"],
         respuesta: "Persa",
       },
       {
-        imagen: "😹",
+        imagen: "images/quiz/esfinge.jpg",
         pregunta: "¿Cuál raza de gato no tiene pelaje?",
         opciones: ["Esfinge", "Bengalí", "Korat", "Tonquinés"],
         respuesta: "Esfinge",
       },
       {
-        imagen: "🐈‍⬛",
+        imagen: "images/quiz/bengali.jpg",
         pregunta: "¿Cuál gato es conocido por sus manchas como un leopardo?",
         opciones: ["Bengalí", "Siamés", "Tailandés", "Bobtail Japonés"],
         respuesta: "Bengalí",
@@ -269,9 +269,9 @@ function mostrarPreguntaAdivinanza() {
   let html = '<div class="quiz-container">';
   html += '<div class="pregunta">' + pregunta.pregunta + "</div>";
   html +=
-    '<div style="font-size: 3em; text-align: center; margin: 20px 0;">' +
+    "<div><img src=" +
     pregunta.imagen +
-    "</div>";
+    ' style="width:100%; object-fit:cover; display:block;"></div>';
   html += '<div class="opciones">';
 
   pregunta.opciones.forEach((opcion, index) => {
