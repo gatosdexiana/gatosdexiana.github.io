@@ -793,7 +793,9 @@ function inicializarReflejos() {
     "❌ NO toques el gato <strong>CALVO</strong> (🙀) - ¡Pierdes directamente!<br>";
   html +=
     "⚠️ Si no tocas un gato con pelo antes de que desaparezca - ¡También pierdes!<br>";
-  html += "⏱️ Tienes 60 segundos. ¡Sé rápido!";
+  html += "⏱️ Tienes 60 segundos. ¡Sé rápido!<br>";
+  html +=
+    '<small><b>X</b><span onclick="cerrarInstruccionesReflejos()">&nbsp;<u>Cerrar instrucciones</u></span></small>';
   html += "</div>";
   html += '<div class="puntuacion-reflejos">';
   html +=
@@ -1011,6 +1013,13 @@ function clickearGato(id, tienePelo, esCalvo) {
       window.datosReflejos.errores;
     elemento.style.opacity = "0";
   }
+}
+function cerrarInstruccionesReflejos() {
+  const instrucciones = document.querySelectorAll(".instrucciones-reflejos");
+  instrucciones.forEach((elemento) => {
+    // 3. Modificar la propiedad 'display' en el objeto 'style' del elemento
+    elemento.style.display = "none";
+  });
 }
 
 function terminarJuegoReflejos(razon = "tiempo") {
