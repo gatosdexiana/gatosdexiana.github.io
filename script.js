@@ -66,9 +66,10 @@ let datos = {
     aciertos: 0,
   },
   sonidos: {
+    sonidoEnReproduccion: undefined,
     preguntas: [
       {
-        sonido: "🐱",
+        sonido: "audios/ronroneo.mp3",
         pregunta: "Este es el sonido de un gato... ¿Qué significa?",
         opciones: [
           "Está feliz",
@@ -79,8 +80,8 @@ let datos = {
         respuesta: "Está feliz",
       },
       {
-        sonido: "😾",
-        pregunta: "Este gato emite un sonido fuerte... ¿Qué puede significar?",
+        sonido: "audios/asustado.mp3",
+        pregunta: "Este gato emite un sonido bajito... ¿Qué puede significar?",
         opciones: [
           "Quiere jugar",
           "Está asustado",
@@ -88,6 +89,17 @@ let datos = {
           "Se siente amado",
         ],
         respuesta: "Está asustado",
+      },
+      {
+        sonido: "audios/jugueton.mp3",
+        pregunta: "Este gato emite un sonido fuerte... ¿Qué puede significar?",
+        opciones: [
+          "Está enfermo",
+          "Se siente amado",
+          "Tiene hambre",
+          "Quiere jugar",
+        ],
+        respuesta: "Quiere jugar",
       },
     ],
     indiceActual: 0,
@@ -374,11 +386,20 @@ function mostrarPreguntaSonidos() {
 
 function reproducirSonido() {
   const pregunta = datos.sonidos.preguntas[datos.sonidos.indiceActual];
-  // Simular reproducción de sonido con un emoji animado
-  alert("🔊 Sonido del gato: " + pregunta.sonido + " (miau/ronroneo)");
+  datos.sonidoEnReproduccion = new Audio(pregunta.sonido);
+  datos.sonidoEnReproduccion
+    .play()
+    .then(() => {
+      console.log("Reproducción iniciada.");
+    })
+    .catch((error) => {
+      console.error("Error de reproducción:", error);
+    });
 }
 
 function verificarSonidos(respuesta, index) {
+  // Detenemos reproducción si está en curso
+  datos.sonidoEnReproduccion?.pause();
   const pregunta = datos.sonidos.preguntas[datos.sonidos.indiceActual];
   const botones = document.querySelectorAll(".btn-opcion");
 
